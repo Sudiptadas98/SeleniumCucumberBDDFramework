@@ -19,6 +19,9 @@ jobs:
 
     runs-on: windows-latest
 
+    env: 
+      MAVEN_OPTS: "-Duser.timezone=Asia/Kolkata"
+
     steps:
 
       # 1. Checkout repository
