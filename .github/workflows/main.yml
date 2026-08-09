@@ -1,11 +1,30 @@
 name: Selenium Cucumber Automation
 
 on:
+  # =========================================================
+  # AUTOMATIC RUN
+  # Runs whenever code is pushed to main
+  # =========================================================
   push:
     branches:
       - main
 
+  # =========================================================
+  # MANUAL RUN
+  # Allows selecting a Cucumber tag
+  # =========================================================
   workflow_dispatch:
+    inputs:
+      cucumber_tag:
+        description: 'Select Cucumber tag to execute'
+        required: true
+        type: choice
+        options:
+          - '@All'
+          - '@PlaceOrder'
+          - '@OfferPage'
+        default: '@All'
+
 
 permissions:
   contents: read
@@ -50,9 +69,51 @@ jobs:
             Remove-Item "test-output" -Recurse -Force
           }
 
-      # 5. Run Selenium + Cucumber + TestNG tests
+      # -----------------------------------------------------
+      # 5. Run Automation Tests
+      #
+      # PUSH:
+      #   Runs ALL tests automatically
+      #
+      # MANUAL:
+      #   Runs selected Cucumber tag
+      # -----------------------------------------------------
       - name: Run Automation Tests
-        run: mvn clean test
+        shell: powershell
+        run: |
+
+          if ("${{ github.event_name }}" -eq "push") {
+
+            Write-Host "========================================="
+            Write-Host "Automatic Push Detected"
+            Write-Host "Running ALL Cucumber Tests"
+            Write-Host "========================================="
+
+            mvn clean test
+
+          }
+          elseif ("${{ inputs.cucumber_tag }}" -eq "@All") {
+
+            Write-Host "========================================="
+            Write-Host "Manual Execution"
+            Write-Host "Selected Tag: @All"
+            Write-Host "Running ALL Cucumber Tests"
+            Write-Host "========================================="
+
+            mvn clean test
+
+          }
+          else {
+
+            Write-Host "========================================="
+            Write-Host "Manual Execution"
+            Write-Host "Selected Tag: ${{ inputs.cucumber_tag }}"
+            Write-Host "========================================="
+
+            mvn clean test "-Dcucumber.filter.tags=${{ inputs.cucumber_tag }}"
+
+          }
+
 
       # 6. Prepare Extent Report for GitHub Pages
       - name: Prepare Extent Report
