@@ -1,0 +1,61 @@
+name: Selenium Cucumber Automation
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+  automation-tests:
+
+    runs-on: windows-latest
+
+    steps:
+
+      # Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Setup Java 8
+      - name: Setup Java 8
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+          cache: maven
+
+      # Verify Java and Maven
+      - name: Verify Java and Maven
+        run: |
+          java -version
+          mvn -version
+
+      # Run Maven Selenium + Cucumber tests
+      - name: Run Automation Tests
+        run: mvn clean test
+
+      # Upload Cucumber HTML report
+      - name: Upload Cucumber HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-html-report
+          path: target/cucumber.html
+
+      # Upload Extent Report
+      - name: Upload Extent Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: test-output/
+
+      # Upload Maven/Surefire reports
+      - name: Upload Maven Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/
