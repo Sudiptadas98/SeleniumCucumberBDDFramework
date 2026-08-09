@@ -10,4 +10,4 @@ And Validate product name in offers page matches with landing page
 Examples:
 |VegName|
 |Tom		|
-|Beet		|
+#|Beet		|
