@@ -14,11 +14,11 @@ jobs:
 
     steps:
 
-      # Checkout source code
+      # Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Setup Java 11
+      # Java 11 is required to run the current TestNG dependency
       - name: Setup Java 11
         uses: actions/setup-java@v5
         with:
@@ -26,17 +26,17 @@ jobs:
           java-version: '11'
           cache: maven
 
-      # Verify Java and Maven
+      # Verify environment
       - name: Verify Java and Maven
         run: |
           java -version
           mvn -version
 
-      # Run Selenium + Cucumber tests
+      # Run Selenium + Cucumber + TestNG tests
       - name: Run Automation Tests
         run: mvn clean test
 
-      # Upload Cucumber HTML Report
+      # Upload Cucumber HTML report
       - name: Upload Cucumber HTML Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -45,7 +45,7 @@ jobs:
           path: target/cucumber.html
           if-no-files-found: warn
 
-      # Upload Extent Report
+      # Upload Extent Spark Report
       - name: Upload Extent Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -54,8 +54,8 @@ jobs:
           path: test-output/
           if-no-files-found: warn
 
-      # Upload Maven/Surefire Reports
-      - name: Upload Maven Test Reports
+      # Upload Maven Surefire/TestNG reports
+      - name: Upload Surefire Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
