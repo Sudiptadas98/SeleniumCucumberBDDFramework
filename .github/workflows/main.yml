@@ -14,16 +14,16 @@ jobs:
 
     steps:
 
-      # Checkout the repository
+      # Checkout source code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Setup Java 8
-      - name: Setup Java 8
-        uses: actions/setup-java@v4
+      # Setup Java 11
+      - name: Setup Java 11
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: '11'
           cache: maven
 
       # Verify Java and Maven
@@ -32,17 +32,18 @@ jobs:
           java -version
           mvn -version
 
-      # Run Maven Selenium + Cucumber tests
+      # Run Selenium + Cucumber tests
       - name: Run Automation Tests
         run: mvn clean test
 
-      # Upload Cucumber HTML report
+      # Upload Cucumber HTML Report
       - name: Upload Cucumber HTML Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-html-report
           path: target/cucumber.html
+          if-no-files-found: warn
 
       # Upload Extent Report
       - name: Upload Extent Report
@@ -51,11 +52,13 @@ jobs:
         with:
           name: extent-report
           path: test-output/
+          if-no-files-found: warn
 
-      # Upload Maven/Surefire reports
+      # Upload Maven/Surefire Reports
       - name: Upload Maven Test Reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: surefire-reports
           path: target/surefire-reports/
+          if-no-files-found: warn
