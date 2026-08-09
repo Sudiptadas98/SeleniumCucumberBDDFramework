@@ -49,7 +49,7 @@ jobs:
 
       # 5. Run Selenium + Cucumber + TestNG tests
       - name: Run Automation Tests
-        run: mvn clean test
+        run: mvn -Duser.timezone=Asia/Kolkata clean test
 
       # 6. Prepare Extent Report for GitHub Pages
       - name: Prepare Extent Report
