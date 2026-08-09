@@ -30,12 +30,12 @@ public class TestBase {
 		if(driver == null) {
 			
 			if(browser.equalsIgnoreCase("chrome")) {
-				System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"\\src\\test\\resources\\chromedriver.exe");
+				//System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir")+"\\src\\test\\resources\\chromedriver.exe");
 			    driver = new ChromeDriver();
 			    driver.manage().window().maximize();
 			}
 			if(browser.equalsIgnoreCase("edge")) {
-				System.setProperty("webdriver.edge.driver", "C:\\Users\\XYZ\\Downloads\\edgedriver_win64\\msedgedriver.exe");
+				//System.setProperty("webdriver.edge.driver", "C:\\Users\\XYZ\\Downloads\\edgedriver_win64\\msedgedriver.exe");
 			    driver = new EdgeDriver();
 			    driver.manage().window().maximize();
 			}
